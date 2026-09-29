@@ -337,7 +337,7 @@ async function requestNotif() {
 }
 
 function sendNotif(symbol, profile) {
-  if (Notification.permission === 'granted') {
+  if ('Notification' in window && Notification.permission === 'granted') {
     new Notification('⚡ Signal détecté — ' + symbol, {
       body: profile + ' · Tap pour voir les détails',
       tag: symbol,
@@ -346,7 +346,7 @@ function sendNotif(symbol, profile) {
   }
 }
 
-if (Notification.permission === 'granted') {
+if ('Notification' in window && Notification.permission === 'granted') {
   document.getElementById('notif-btn').textContent = '✅ Notifications activées';
   document.getElementById('notif-btn').style.color = 'var(--teal)';
 }
