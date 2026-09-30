@@ -216,9 +216,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
     <div class="page active" id="page-dashboard">
       <div class="kpi-row">
-        <div class="kpi"><div class="kpi-val teal" id="kpi-capital">250$</div><div class="kpi-label">Capital</div></div>
+        <div class="kpi"><div class="kpi-val teal" id="kpi-capital">250$</div><div class="kpi-label">Solde</div></div>
         <div class="kpi"><div class="kpi-val amber" id="kpi-positions">0/2</div><div class="kpi-label">Positions</div></div>
         <div class="kpi"><div class="kpi-val" id="kpi-scan">--:--</div><div class="kpi-label">Prochain scan</div></div>
+      </div>
+      <div class="kpi-row" style="margin-top:8px">
+        <div class="kpi"><div class="kpi-val" id="kpi-realized">0$</div><div class="kpi-label">P&L réalisé</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-unrealized">0$</div><div class="kpi-label">P&L latent</div></div>
       </div>
 
       <div class="section-label">Signaux en attente</div>
@@ -500,7 +504,18 @@ async function refresh() {
     renderLogs(d.logs);
 
     document.getElementById('kpi-positions').textContent = (d.active_count || 0) + '/2';
-    document.getElementById('kpi-capital').textContent = (d.capital || 250) + '$';
+    const balance = (d.balance !== undefined) ? d.balance : (d.capital || 250);
+    document.getElementById('kpi-capital').textContent = balance + '$';
+
+    const realized = d.realized_pnl || 0;
+    const unrealized = d.unrealized_pnl || 0;
+    const elR = document.getElementById('kpi-realized');
+    const elU = document.getElementById('kpi-unrealized');
+    elR.textContent = (realized >= 0 ? '+' : '') + realized + '$';
+    elR.className = 'kpi-val ' + (realized >= 0 ? 'teal' : 'red');
+    elU.textContent = (unrealized >= 0 ? '+' : '') + unrealized + '$';
+    elU.className = 'kpi-val ' + (unrealized >= 0 ? 'teal' : 'red');
+
     if (d.next_scan_sec) nextScan = d.next_scan_sec;
 
   } catch(e) {
