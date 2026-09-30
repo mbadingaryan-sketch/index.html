@@ -85,15 +85,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 @keyframes enter{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .signal-card.long{border-color:#0D2E1A}
 .signal-card.short{border-color:#2E0A0A}
-.signal-card.listing{border-color:#0A1E3A}
 .sig-top{padding:14px 14px 10px;display:flex;justify-content:space-between;align-items:flex-start}
 .sig-badge{
   display:inline-block;font-size:9px;font-family:var(--mono);font-weight:700;
-  letter-spacing:.8px;padding:3px 7px;border-radius:4px;
+  letter-spacing:.8px;padding:3px 7px;border-radius:4px;margin-right:4px;
 }
 .badge-long{background:#0D2E1A;color:var(--teal)}
 .badge-short{background:#2E0A0A;color:var(--red)}
-.badge-listing{background:#0A1E3A;color:var(--blue)}
+.badge-mode{background:var(--surface2);color:var(--blue);border:1px solid var(--border)}
 .sig-symbol{font-size:28px;font-weight:800;color:var(--bright);font-family:var(--mono);letter-spacing:-1.5px;margin-top:6px;line-height:1}
 .sig-symbol small{font-size:13px;color:var(--muted);font-weight:400}
 .sig-price{font-size:12px;color:var(--muted);margin-top:3px;font-family:var(--mono)}
@@ -110,9 +109,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .sig-grid-info{padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
 .sig-range{font-family:var(--mono);font-size:11px;color:var(--text)}
 .sig-range small{color:var(--muted);font-size:9px;display:block;margin-bottom:2px}
-.sig-risk{text-align:right}
-.sig-risk-val{font-size:13px;font-weight:700;font-family:var(--mono);color:var(--red)}
-.sig-risk-label{font-size:9px;color:var(--muted)}
 .sig-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px 14px}
 .btn-launch{
   background:var(--teal);color:#020E0A;border:none;border-radius:var(--r-sm);
@@ -203,7 +199,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="brand-icon">⚡</div>
       <div>
         <div class="brand-name">Sentinel-Grid</div>
-        <div class="brand-sub">TRADING BOT</div>
+        <div class="brand-sub">PRO-WS MAKER</div>
       </div>
     </div>
     <div class="status-pill">
@@ -216,7 +212,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
     <div class="page active" id="page-dashboard">
       <div class="kpi-row">
-        <div class="kpi"><div class="kpi-val teal" id="kpi-capital">250$</div><div class="kpi-label">Solde</div></div>
+        <div class="kpi"><div class="kpi-val teal" id="kpi-capital">250$</div><div class="kpi-label">Solde global</div></div>
         <div class="kpi"><div class="kpi-val amber" id="kpi-positions">0/2</div><div class="kpi-label">Positions</div></div>
         <div class="kpi"><div class="kpi-val" id="kpi-scan">--:--</div><div class="kpi-label">Prochain scan</div></div>
       </div>
@@ -227,7 +223,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
       <div class="section-label">Signaux en attente</div>
       <div id="signals-wrap">
-        <div class="empty"><div class="empty-icon">😴</div><div class="empty-title">Aucun signal</div><div class="empty-sub">Le bot scanne toutes les 15 minutes</div></div>
+        <div class="empty"><div class="empty-icon">😴</div><div class="empty-title">Aucun signal</div><div class="empty-sub">Le bot scanne en tâche de fond</div></div>
       </div>
 
       <div class="section-label">Positions actives</div>
@@ -244,7 +240,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
 
     <div class="page" id="page-stats">
-      <div class="section-label">Rentabilité</div>
+      <div class="section-label">Rentabilité Global (Binance)</div>
       <div class="kpi-row">
         <div class="kpi"><div class="kpi-val" id="stat-total">0</div><div class="kpi-label">Trades</div></div>
         <div class="kpi"><div class="kpi-val" id="stat-winrate">0%</div><div class="kpi-label">Win rate</div></div>
@@ -254,11 +250,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="kpi"><div class="kpi-val teal" id="stat-gp">0$</div><div class="kpi-label">Gains bruts</div></div>
         <div class="kpi"><div class="kpi-val red" id="stat-gl">0$</div><div class="kpi-label">Pertes brutes</div></div>
       </div>
-      <div class="section-label" style="margin-top:24px">Repères</div>
+      <div class="section-label" style="margin-top:24px">Repères d'évaluation</div>
       <div class="settings-group">
         <div class="settings-row"><div><div class="settings-label">Profit factor</div><div class="settings-sub">&gt; 1 = rentable net des pertes · &gt; 1.5 = solide</div></div></div>
-        <div class="settings-row"><div><div class="settings-label">Trades</div><div class="settings-sub">Il en faut plusieurs dizaines pour un résultat fiable</div></div></div>
-        <div class="settings-row"><div><div class="settings-label">Win rate</div><div class="settings-sub">Pas décisif seul — un profit factor élevé avec un win rate bas reste rentable</div></div></div>
+        <div class="settings-row"><div><div class="settings-label">Trades</div><div class="settings-sub">Représentatif à partir de 30-50 exécutions</div></div></div>
       </div>
     </div>
 
@@ -267,7 +262,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="settings-group">
         <div class="settings-full">
           <div class="settings-label">URL du bot</div>
-          <div class="settings-sub">L'URL générée par Railway pour ton service</div>
+          <div class="settings-sub">L'URL générée par Railway</div>
           <input class="settings-input" id="railway-url" type="url" placeholder="https://xxxx.railway.app">
         </div>
       </div>
@@ -277,16 +272,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="settings-group">
         <div class="settings-full">
           <div class="settings-label">Alertes sur ce téléphone</div>
-          <div class="settings-sub">Reçois une notification quand un signal est détecté</div>
           <button class="btn-notif" id="notif-btn" onclick="requestNotif()">🔔 Activer les notifications</button>
         </div>
-      </div>
-
-      <div class="section-label" style="margin-top:24px">À propos</div>
-      <div class="settings-group">
-        <div class="settings-row"><div><div class="settings-label">Version</div><div class="settings-sub">Sentinel-Grid v1.0</div></div></div>
-        <div class="settings-row"><div><div class="settings-label">Capital configuré</div><div class="settings-sub">250$ / Levier 2x</div></div></div>
-        <div class="settings-row"><div><div class="settings-label">Mode</div><div class="settings-sub" id="mode-display">Testnet</div></div></div>
       </div>
     </div>
 
@@ -348,33 +335,18 @@ function saveSettings() {
 }
 
 async function requestNotif() {
-  if (!('Notification' in window)) {
-    showBanner('❌ Non supporté', 'Ton navigateur ne supporte pas les notifications');
-    return;
-  }
+  if (!('Notification' in window)) return;
   const perm = await Notification.requestPermission();
   if (perm === 'granted') {
     document.getElementById('notif-btn').textContent = '✅ Notifications activées';
     document.getElementById('notif-btn').style.color = 'var(--teal)';
-    showBanner('🔔 Activé', 'Tu recevras une alerte à chaque signal détecté');
-  } else {
-    showBanner('❌ Refusé', 'Active les notifications dans les réglages du navigateur');
   }
 }
 
 function sendNotif(symbol, profile) {
   if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification('⚡ Signal détecté — ' + symbol, {
-      body: profile + ' · Tap pour voir les détails',
-      tag: symbol,
-      renotify: true
-    });
+    new Notification('⚡ Signal détecté — ' + symbol, { body: profile, tag: symbol, renotify: true });
   }
-}
-
-if ('Notification' in window && Notification.permission === 'granted') {
-  document.getElementById('notif-btn').textContent = '✅ Notifications activées';
-  document.getElementById('notif-btn').style.color = 'var(--teal)';
 }
 
 let bannerTimer;
@@ -389,18 +361,16 @@ function showBanner(title, body) {
 }
 
 function profileBadge(p) {
-  if (p === 'VOLATILE')        return ['badge-long','long','🌊 VOLATILE'];
-  if (p === 'IMPULSION')       return ['badge-long','long','⚡ IMPULSION'];
-  if (p === 'NOUVEAU_LISTING') return ['badge-listing','listing','🆕 LISTING'];
-  if (p === 'SHORT_VOLATILE')  return ['badge-short','short','🔴 SHORT VOLATILE'];
-  if (p === 'SHORT_IMPULSION') return ['badge-short','short','🔴 SHORT IMPULSION'];
+  if (p === 'VOLATILE')       return ['badge-long','long','🌊 VOLATILE'];
+  if (p === 'NEUTRAL')        return ['badge-long','long','⚖️ NEUTRAL'];
+  if (p === 'SHORT_VOLATILE') return ['badge-short','short','🔴 SHORT VOLATILE'];
   return ['badge-long','long',p];
 }
 
 function renderSignals(signals) {
   const wrap = document.getElementById('signals-wrap');
   if (!signals || !signals.length) {
-    wrap.innerHTML = '<div class="empty"><div class="empty-icon">😴</div><div class="empty-title">Aucun signal</div><div class="empty-sub">Le bot scanne toutes les 15 minutes</div></div>';
+    wrap.innerHTML = '<div class="empty"><div class="empty-icon">😴</div><div class="empty-title">Aucun signal</div><div class="empty-sub">Le bot scanne en tâche de fond</div></div>';
     return;
   }
 
@@ -409,7 +379,7 @@ function renderSignals(signals) {
     const s = signals.find(x => x.symbol === sym);
     if (s) {
       sendNotif(sym, s.profile);
-      showBanner('⚡ Signal : ' + sym, s.profile + ' · RVOL ' + s.metrics.rvol + 'x · Lancement dans 3 min');
+      showBanner('⚡ Signal : ' + sym, s.profile + ' [' + (s.mode || 'VOLATILE') + ' x' + s.leverage + ']');
     }
   });
   lastSignals = signals.map(s => s.symbol);
@@ -422,6 +392,7 @@ function renderSignals(signals) {
       <div class="sig-top">
         <div class="sig-left">
           <span class="sig-badge ${bc}">${label}</span>
+          <span class="sig-badge badge-mode">${s.mode || 'VOLATILE'} x${s.leverage}</span>
           <div class="sig-symbol">${s.symbol.replace('USDT','')}<small>/USDT</small></div>
           <div class="sig-price">${s.metrics.price} USDT</div>
         </div>
@@ -440,10 +411,6 @@ function renderSignals(signals) {
         <div class="sig-metric"><div class="sig-metric-val">${s.metrics.rsi}</div><div class="sig-metric-label">RSI</div></div>
         <div class="sig-metric"><div class="sig-metric-val">${s.metrics.adx}</div><div class="sig-metric-label">ADX</div></div>
         <div class="sig-metric"><div class="sig-metric-val">${s.metrics.var_1h}%</div><div class="sig-metric-label">Var 1h</div></div>
-      </div>
-      <div class="sig-grid-info">
-        <div class="sig-range"><small>Grille · ${s.grilles} niveaux</small>${s.lower} → ${s.upper}</div>
-        <div class="sig-risk"><div class="sig-risk-val">-${s.risk_max}$</div><div class="sig-risk-label">Risque max</div></div>
       </div>
       <div class="sig-actions">
         <button class="btn-launch" onclick="action('OPEN','${s.symbol}')">✅ Lancer</button>
@@ -475,7 +442,7 @@ function renderPositions(positions) {
   wrap.innerHTML = positions.map(p => `
     <div class="pos-card">
       <div>
-        <div class="pos-sym">${p.symbol}</div>
+        <div class="pos-sym">${p.symbol} <span style="font-size:10px;color:var(--muted)">[${p.mode} x${p.leverage}]</span></div>
         <div class="pos-entry">Entrée @ ${p.entry_price}</div>
       </div>
       <div>
